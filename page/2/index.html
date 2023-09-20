@@ -73,6 +73,41 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-select_epoll" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/09/20/select_epoll/" class="article-date">
+  <time class="dt-published" datetime="2023-09-20T14:38:32.007Z" itemprop="datePublished">2023-09-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="select-poll-epoll-的区别"><a href="#select-poll-epoll-的区别" class="headerlink" title="select&#x2F;poll&#x2F;epoll 的区别"></a>select&#x2F;poll&#x2F;epoll 的区别</h2><ul>
+<li>它们都是用线性结构来存储进程关注的Socket集合</li>
+<li>select&#x2F;poll系统调用从用户态拷贝到内核态</li>
+<li>select和poll的缺陷：客户端大，Socket集合大，Socket集合的遍历和拷贝会带来很大的开销。</li>
+<li>epoll解决这个问题：在内核里使用红黑树关注Socket 时间复杂度O(logn), 不用每次操作时都传入整个Socket集合。节省了资源</li>
+<li>内部维护链表来记录就绪事件。只将有事件发生的 Socket 集合传递给应用程序，不需要像 select&#x2F;poll 那样轮询扫描整个集合（包含有和无事件的 Socket ），大大提高了检测的效率。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/09/20/select_epoll/" data-id="clmrundbt0003wstjbluv8zop" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL必知必会" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/09/20/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="article-date">
@@ -817,6 +852,10 @@
       <ul>
         
           <li>
+            <a href="/2023/09/20/%E7%BD%91%E7%9B%98%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/">网盘项目笔记</a>
+          </li>
+        
+          <li>
             <a href="/2023/09/20/%E9%93%BE%E6%8E%A5%E5%8A%A8%E6%80%81%E5%BA%93/">(no title)</a>
           </li>
         
@@ -830,10 +869,6 @@
         
           <li>
             <a href="/2023/09/20/%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2023/09/20/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">(no title)</a>
           </li>
         
       </ul>
