@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>线程-C语言</title>
+      <link href="/2023/09/21/%E7%BA%BF%E7%A8%8B-C%E8%AF%AD%E8%A8%80/"/>
+      <url>/2023/09/21/%E7%BA%BF%E7%A8%8B-C%E8%AF%AD%E8%A8%80/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C语言中的线程"><a href="#C语言中的线程" class="headerlink" title="C语言中的线程"></a>C语言中的线程</h1><h2 id="1-进程和线程"><a href="#1-进程和线程" class="headerlink" title="1. 进程和线程"></a>1. 进程和线程</h2><ol><li><p>进程是资源分配的最小单位，线程是操作系统调度执行的最小单位。</p></li><li><p>进程和线程的区别：</p><ul><li><p>进程有自己独立的地址空间，多个线程共用同一个地址空间。</p><ul><li><p>在一个地址空间中，多个线程独享：栈区，寄存器。</p></li><li><p>在一个地址空间中，多个线程共享：代码区，堆区，全局数据区，打开的文件。</p></li></ul></li><li><p>线程是程序的最小执行单元，进程是最小的资源分配单位。</p></li><li><p>CPU的调度和切换：线程的上下文切换比进程要快的多。</p></li><li><p>线程更加廉价，启动速度快，退出快，对系统资源的冲击小。</p></li></ul></li></ol><h2 id="2-创建线程"><a href="#2-创建线程" class="headerlink" title="2. 创建线程"></a>2. 创建线程</h2><pre><code class="c++">phread_t phread_self(void); //线程函数，返回当前线程的ID</code></pre><pre><code class="c">#include &lt;pthread.h&gt;int pthread_create(pthread_t *thread, const pthread_attr_t *attr,                   void *(*start_routine) (void *), void *arg);// Compile and link with -pthread, 线程库的名字叫pthread, 全名: libpthread.so libptread.a</code></pre><ul><li>虚拟地址空间的生命周期和主线程是一样的，与子线程无关。</li><li>sleep（）：可以让主线程挂起，让子线程执行完毕，主线程再退出。</li></ul><h2 id="3-线程退出"><a href="#3-线程退出" class="headerlink" title="3. 线程退出"></a>3. 线程退出</h2><pre><code class="c++">#include&lt;pthread.h&gt;void phtread_eixt(void *retval);//只要调用该函数当前线程就马上退出了，并且不会影响到其他线程的正常运行，不管是在子线程或者主线程中都可以使用。//主线程调用退出函数退出, 地址空间不会被释放</code></pre><h2 id="4-线程回收"><a href="#4-线程回收" class="headerlink" title="4. 线程回收"></a>4. 线程回收</h2><blockquote><p>子线程退出的时候其内核资源主要由主线程回收，线程库中提供的线程回收函叫做<code> pthread_join()</code>，这个函数是一个阻塞函数，如果还有子线程在运行，调用该函数就会阻塞，子线程退出函数解除阻塞进行资源的回收，函数被调用一次，只能回收一个子线程，如果有多个子线程则需要循环进行回收。</p></blockquote><h3 id="4-1-回收子线程数据"><a href="#4-1-回收子线程数据" class="headerlink" title="4.1 回收子线程数据"></a>4.1 回收子线程数据</h3><ul><li><p>使用子线程栈 ：</p><pre><code class="c++">pthread_exit(&amp;p); //子线程退出pthread_join(tid, &amp;ptr); //主线程回收子线程资源，通过ptr void*类型指针传出子线程数据。</code></pre></li><li><p>使用全局变量</p><ul><li>位于同一虚拟地址空间中的线程，虽然不能共享栈区数据，但是<strong>可以共享全局数据区和堆区数据</strong>，因此在子线程退出的时候可以将<strong>传出数据存储到全局变量、静态变量或者堆内存</strong>中。</li></ul></li><li><p>使用主线程栈</p></li></ul><h2 id="5-线程分离"><a href="#5-线程分离" class="headerlink" title="5. 线程分离"></a>5. 线程分离</h2><pre><code class="c++">#include &lt;pthread.h&gt;// 参数就子线程的线程ID, 主线程就可以和这个子线程分离了int pthread_detach(pthread_t thread);</code></pre><ul><li><p>调用这个函数之后指定的子线程就可以和主线程分离，当子线程退出的时候，其占用的内核资源就被系统的其他进程接管并回收了。线程分离之后在主线程中使用 <code>pthread_join()</code> 就回收不到子线程资源了。</p></li><li><p>为何使用线程分离：因为主线程有自己的业务处理流程，如果让主线程负责子线程的资源回收，调用<code> pthread_join()</code> 只要子线程不退出主线程就会一直被阻塞，主要线程的任务也就不能被执行了。</p></li></ul><h2 id="6-其他线程函数"><a href="#6-其他线程函数" class="headerlink" title="6. 其他线程函数"></a>6. 其他线程函数</h2><ul><li><p>线程取消</p><pre><code class="c">#include&lt;pthread.h&gt;int pthread_cancel(pthread_t, thread);</code></pre><blockquote><p>使用这个函数杀死一个线程需要分两步：</p><p>在线程 A 中调用线程取消函数 <code>pthread_cancel</code>，指定杀死线程 B，这时候线程 B 是死不了的<br>在线程 B 中进程一次系统调用（从用户区切换到内核区），否则线程 B 可以一直运行。</p></blockquote></li><li><p>线程ID比较</p><ul><li><p>在 Linux 中线程 ID 本质就是一个无符号长整形，在某些平台上<code>pthread_t</code>可能不是一个单纯的整形，这种情况下比较两个线程的 ID 必须要使用比较函数，函数原型如下</p><pre><code class="c">#include &lt;pthread.h&gt;int pthread_equal(pthread_t t1, pthread_t t2);</code></pre><blockquote><p>参数：t1 和 t2 是要比较的线程的线程 ID<br>返回值：如果两个线程 ID 相等返回非 0 值，如果不相等返回 0</p></blockquote></li></ul></li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Linux C </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>分布式云盘</title>
       <link href="/2023/09/21/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%91%E7%9B%98/"/>
       <url>/2023/09/21/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%91%E7%9B%98/</url>
