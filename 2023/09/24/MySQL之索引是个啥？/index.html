@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MySQL之索引是个啥？ | 小捞板儿的Blog</title><meta name="author" content="小捞板儿"><meta name="copyright" content="小捞板儿"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="MySQL之索引是个啥？1. 索引是啥？索引就是数据的目录，帮助存储引擎快速找到数据的一种数据结构。 2. 索引存在哪？索引和数据都存在存储引擎里。（物理上在硬盘里）   3. 索引的分类  在InnoDB引擎里，索引使用B+树的数据结构。 4. B+ 树B+ 树 是 多叉树 ， 叶子节点放数据，非叶子节点只放索引。在叶子节点里有所有的索引值信息，而且每个叶子节点有两个指针，构成双向链表。  B+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL之索引是个啥？">
+<meta property="og:url" content="https://cui7shark.github.io/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/index.html">
+<meta property="og:site_name" content="小捞板儿的Blog">
+<meta property="og:description" content="MySQL之索引是个啥？1. 索引是啥？索引就是数据的目录，帮助存储引擎快速找到数据的一种数据结构。 2. 索引存在哪？索引和数据都存在存储引擎里。（物理上在硬盘里）   3. 索引的分类  在InnoDB引擎里，索引使用B+树的数据结构。 4. B+ 树B+ 树 是 多叉树 ， 叶子节点放数据，非叶子节点只放索引。在叶子节点里有所有的索引值信息，而且每个叶子节点有两个指针，构成双向链表。  B+">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-24T13:22:34.000Z">
+<meta property="article:modified_time" content="2023-09-24T14:20:55.284Z">
+<meta property="article:author" content="小捞板儿">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/qihai.jpg"><link rel="canonical" href="https://cui7shark.github.io/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL之索引是个啥？',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-24 22:20:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/modify.css"><meta name="generator" content="Hexo 6.3.0"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/loading.gif" data-original="/img/qihai.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="小捞板儿的Blog"><span class="site-name">小捞板儿的Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">MySQL之索引是个啥？</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-24T13:22:34.000Z" title="发表于 2023-09-24 21:22:34">2023-09-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-24T14:20:55.284Z" title="更新于 2023-09-24 22:20:55">2023-09-24</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">875</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MySQL之索引是个啥？"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg');"></div><article class="post-content" id="article-container"><h1 id="MySQL之索引是个啥？"><a href="#MySQL之索引是个啥？" class="headerlink" title="MySQL之索引是个啥？"></a>MySQL之索引是个啥？</h1><h2 id="1-索引是啥？"><a href="#1-索引是啥？" class="headerlink" title="1. 索引是啥？"></a>1. 索引是啥？</h2><p>索引就是数据的目录，帮助存储引擎快速找到数据的一种<strong>数据结构</strong>。</p>
+<h2 id="2-索引存在哪？"><a href="#2-索引存在哪？" class="headerlink" title="2. 索引存在哪？"></a>2. 索引存在哪？</h2><p>索引和数据都存在存储引擎里。（物理上在硬盘里）</p>
+<img src="/img/loading.gif" data-original="../MySQL/2.png" alt="image-20230924213122812" style="zoom:67%;">
+
+<h2 id="3-索引的分类"><a href="#3-索引的分类" class="headerlink" title="3. 索引的分类"></a>3. 索引的分类</h2><img src="/img/loading.gif" data-original="../MySQL/3.png" alt="image-20230924213248732" style="zoom:67%;">
+
+<p>在InnoDB引擎里，索引使用B+树的数据结构。</p>
+<h2 id="4-B-树"><a href="#4-B-树" class="headerlink" title="4. B+ 树"></a>4. B+ 树</h2><p>B+ 树 是 <strong>多叉树</strong> ， 叶子节点放数据，<strong>非叶子节点只放索引</strong>。在叶子节点里有所有的索引值信息，而且每个叶子节点有两个指针，构成双向链表。</p>
+<p><img src="/img/loading.gif" data-original="/../MySQL/4.png" alt="image-20230924214103011"></p>
+<p>B+树存储千万级数据只需要3-4层就够了。</p>
+<p><strong>优势</strong>：查询效率高。<strong>因为即使在数据量很大的情况，查询一个数据的磁盘 I/O 依然维持在 3-4次。</strong></p>
+<h2 id="5-为什么-MySQL-InnoDB-选择-B-tree-作为索引的数据结构？"><a href="#5-为什么-MySQL-InnoDB-选择-B-tree-作为索引的数据结构？" class="headerlink" title="5. 为什么 MySQL InnoDB 选择 B+tree 作为索引的数据结构？"></a>5. 为什么 MySQL InnoDB 选择 B+tree 作为索引的数据结构？</h2><p>B+树只在叶子节点存数据，但是B树非叶子节点也存数据，B+树单个节点数据量小，树的高度低，IO次数少。</p>
+<p>B+树叶子节点用双向链表连接，适合MySQL常见基于范围的顺序查找，而 B 树无法做到这一点。B+树查询复杂度$O(log_2{dN})$  d表示节点允许的最大子节点个数为 d 个。</p>
+<h2 id="6-主键索引、唯一索引、普通索引、前缀索引-按字段特性分"><a href="#6-主键索引、唯一索引、普通索引、前缀索引-按字段特性分" class="headerlink" title="6. 主键索引、唯一索引、普通索引、前缀索引 (按字段特性分)"></a>6. 主键索引、唯一索引、普通索引、前缀索引 (按字段特性分)</h2><ol>
+<li>主键索引的B+树的叶子节点存放实际数据，普通索引或者二级索引放主键的值。</li>
+</ol>
+<p>主键索引：一张表只能有一个，索引列的值不能为空值。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">CREATE TABLE table_name (</span><br><span class="line">    ...</span><br><span class="line">    PRIMARY KEY (index_column_1) USING BTREE</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<ol start="2">
+<li><p>唯一索引：建立在 UNIQUE 字段上的索引，一张表可以有多个唯一索引，索引列的值必须唯一，但是允许有空值。</p>
+</li>
+<li><p>普通索引：允许有空值，可以有多个。建立在普通字段上的索引，既不要求字段为主键，也不要求字段为 UNIQUE。</p>
+</li>
+<li><p>前缀索引： 前缀索引是指对字符类型字段的前几个字符建立的索引，而不是在整个字段上建立的索引，前缀索引可以建立在字段类型为 char、 varchar、binary、varbinary 的列上。</p>
+<p><strong>使用前缀索引的目的是为了减少索引占用的存储空间，提升查询效率。</strong></p>
+</li>
+</ol>
+<h2 id="7-索引啥时候用合适啊？"><a href="#7-索引啥时候用合适啊？" class="headerlink" title="7. 索引啥时候用合适啊？"></a>7. 索引啥时候用合适啊？</h2><p>索引的好处是提高查询速度，<strong>但是缺点：</strong></p>
+<ol>
+<li>需要占用空间</li>
+<li>创建维护索引耗费时间，数据越多越耗时。</li>
+<li>会降低表的增删改的效率，因为每次增删改索引，B+ 树为了维护索引有序性，都需要进行动态维护。</li>
+</ol>
+<p><strong>适用场景：</strong></p>
+<ol>
+<li>字段唯一 ，如学号，商品编号。</li>
+<li>经常用<code>where</code>查询条件的字段，可以提高查询速度，不是一个字段，可以用联合索引。</li>
+<li>经常用<code>order by</code>和<code>group by</code> ， 建立索引后B+树中的记录是排好序的，就不用在排序一次了。</li>
+</ol>
+<p><strong>不适用场景：</strong></p>
+<ol>
+<li>索引用来快速定位，起不到定位作用的字段不用建立索引，浪费空间。</li>
+<li>字段里有大量重复数据，比如： 男 ， 女</li>
+<li>表里数据太少</li>
+<li>经常更新的字段不用建立索引。因为索引字段频繁修改，<strong>由于要维护 B+Tree的有序性</strong>，那么就需要频繁的重建索引，这个过程是会影响数据库性能的。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://cui7shark.github.io">小捞板儿</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cui7shark.github.io/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/">https://cui7shark.github.io/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cui7shark.github.io" target="_blank">小捞板儿的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/09/24/MySQL%E4%B9%8B%E6%89%A7%E8%A1%8Cselect%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%B5%81%E7%A8%8B/" title="MySQL之执行select语句的流程"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL之执行select语句的流程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/24/MySQL%E4%B9%8B%E6%89%A7%E8%A1%8Cselect%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%B5%81%E7%A8%8B/" title="MySQL之执行select语句的流程"><img class="cover" src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-24</div><div class="title">MySQL之执行select语句的流程</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/qihai.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info__name">小捞板儿</div><div class="author-info__description">七海大鲨鱼</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Cui7Shark"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Cui7Shark" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1423469029@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">MySQL之索引是个啥？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B4%A2%E5%BC%95%E6%98%AF%E5%95%A5%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1. 索引是啥？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B4%A2%E5%BC%95%E5%AD%98%E5%9C%A8%E5%93%AA%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">2. 索引存在哪？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">3. 索引的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-B-%E6%A0%91"><span class="toc-number">1.4.</span> <span class="toc-text">4. B+ 树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%BA%E4%BB%80%E4%B9%88-MySQL-InnoDB-%E9%80%89%E6%8B%A9-B-tree-%E4%BD%9C%E4%B8%BA%E7%B4%A2%E5%BC%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">5. 为什么 MySQL InnoDB 选择 B+tree 作为索引的数据结构？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%E3%80%81%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E3%80%81%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95%E3%80%81%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95-%E6%8C%89%E5%AD%97%E6%AE%B5%E7%89%B9%E6%80%A7%E5%88%86"><span class="toc-number">1.6.</span> <span class="toc-text">6. 主键索引、唯一索引、普通索引、前缀索引 (按字段特性分)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%B4%A2%E5%BC%95%E5%95%A5%E6%97%B6%E5%80%99%E7%94%A8%E5%90%88%E9%80%82%E5%95%8A%EF%BC%9F"><span class="toc-number">1.7.</span> <span class="toc-text">7. 索引啥时候用合适啊？</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/" title="MySQL之索引是个啥？"><img src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL之索引是个啥？"></a><div class="content"><a class="title" href="/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/" title="MySQL之索引是个啥？">MySQL之索引是个啥？</a><time datetime="2023-09-24T13:22:34.000Z" title="发表于 2023-09-24 21:22:34">2023-09-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/24/MySQL%E4%B9%8B%E6%89%A7%E8%A1%8Cselect%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%B5%81%E7%A8%8B/" title="MySQL之执行select语句的流程"><img src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL之执行select语句的流程"></a><div class="content"><a class="title" href="/2023/09/24/MySQL%E4%B9%8B%E6%89%A7%E8%A1%8Cselect%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%B5%81%E7%A8%8B/" title="MySQL之执行select语句的流程">MySQL之执行select语句的流程</a><time datetime="2023-09-24T12:55:08.000Z" title="发表于 2023-09-24 20:55:08">2023-09-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" title="线程同步"><img src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="线程同步"></a><div class="content"><a class="title" href="/2023/09/21/%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/" title="线程同步">线程同步</a><time datetime="2023-09-21T02:40:27.000Z" title="发表于 2023-09-21 10:40:27">2023-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/%E7%BA%BF%E7%A8%8B-C%E8%AF%AD%E8%A8%80/" title="线程-C语言"><img src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="线程-C语言"></a><div class="content"><a class="title" href="/2023/09/21/%E7%BA%BF%E7%A8%8B-C%E8%AF%AD%E8%A8%80/" title="线程-C语言">线程-C语言</a><time datetime="2023-09-21T02:35:41.000Z" title="发表于 2023-09-21 10:35:41">2023-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%91%E7%9B%98/" title="分布式云盘"><img src="/img/loading.gif" data-original="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式云盘"></a><div class="content"><a class="title" href="/2023/09/21/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%91%E7%9B%98/" title="分布式云盘">分布式云盘</a><time datetime="2023-09-21T02:14:53.000Z" title="发表于 2023-09-21 10:14:53">2023-09-21</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">©2020 - 2023 By 小捞板儿</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
