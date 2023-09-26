@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>HTTP报文</title>
+      <link href="/2023/09/26/HTTP%E6%8A%A5%E6%96%87/"/>
+      <url>/2023/09/26/HTTP%E6%8A%A5%E6%96%87/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTTP报文"><a href="#HTTP报文" class="headerlink" title="HTTP报文"></a>HTTP报文</h1><p>报文首部（C&#x2F;S通讯处理的重要信息）+ 空行 + 报文主体（资源信息）</p><h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><p>报文首部（<strong>请求行</strong> + HTTP首部字段&lt;请求首部字段 + 通用首部字段 + 实体首部字段&gt; + 其他）</p><ul><li></li></ul><p>空行<br>+</p><p>报文主体</p><blockquote><p>请求行里：方法 、URI、HTTP版本</p></blockquote><h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><p>报文首部（<strong>状态行</strong> + HTTP首部字段&lt;响应首部字段 + 通用首部字段 + 实体首部字段&gt; + 其他）</p><ul><li></li></ul><p>空行<br>+</p><p>报文主体</p><blockquote><p>状态行里：HTTP版本 、状态码（200 OK）</p></blockquote><h2 id="首部字段类型（4种）"><a href="#首部字段类型（4种）" class="headerlink" title="首部字段类型（4种）"></a>首部字段类型（4种）</h2><ol><li><p>通用首部字段 </p><ul><li>请求报文和响应报文都会用到的首部。</li></ul></li><li><p>请求首部字段</p><ul><li>补充了请求的附加内容、客户端信息、响应内容相关优先级等信息。</li></ul></li><li><p>响应首部字段</p><ul><li>补充了响应时的附加内容，也会要求客户端附加额外的内容信息。</li></ul></li><li><p>实体首部字段</p><ul><li>补充了资源内容更新时间等与实体有关的信息。</li></ul></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HTTP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>MySQL之索引是个啥？</title>
       <link href="/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/"/>
       <url>/2023/09/24/MySQL%E4%B9%8B%E7%B4%A2%E5%BC%95%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F/</url>
